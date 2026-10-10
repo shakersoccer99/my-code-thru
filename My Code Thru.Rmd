@@ -1,0 +1,96 @@
+---
+title: "My Code-Thru"
+author: "Lauren"
+date: "2026-02-02"
+output:
+  html_document:
+    theme: flatly
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: show
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(dplyr)
+library(forcats)
+```
+
+
+
+
+## Introduction
+**Factors are used to represent categorical data in R. While they look like character strings on the surface, under the hood they are stored as integers with associated text labels. Understanding how to create, manipulate, and convert factors is essential for accurate data analysis and plotting.**
+
+### 1 - Creating Factors vs. Character Vectors Let's start by creating a simple character vector representing months:
+
+```{r}
+# A raw character vector
+months_char <- c("Jan", "Mar", "Feb", "Jan", "Mar")
+months_char
+
+# Convert to a basic factor
+months_factor <- factor(months_char)
+months_factor
+```
+
+
+### 2. Setting Custom Factor Levels: To enforce a logical sequence (like month order), specify the levels argument explicitly.
+
+
+```{r}
+months_ordered <- factor(
+  months_char, 
+  levels = c("Jan", "Feb", "Mar")
+)
+
+months_ordered
+```
+
+### 3. The Classic Factor Pitfall: Converting Factors to Numeric: A common bug in R occurs when converting factors containing numeric values directly to numeric types.
+
+## The Wrong Way:
+
+**Converting directly with as.numeric() returns the underlying integer codes, not the actual numbers!**
+
+```{r}
+
+# Factor representing numeric measurements
+num_factor <- factor(c("10", "20", "30", "20"))
+
+# Incorrect conversion:
+as.numeric(num_factor)
+
+```
+
+
+## The Right Way:
+
+**First convert the factor to a character string, then to numeric (or use as.numeric(levels(f))[f]):**
+
+```{r}
+# Correct conversion:
+as.numeric(as.character(num_factor))
+```
+
+
+## 4. Reordering Factors for Visualization: 
+
+**When plotting categorical variables with ggplot2, factor level order determines the arrangement on plot axes.**
+
+
+```{r}
+# View count by level before reordering
+table(months_ordered)
+
+# Reorder factor levels by frequency using forcats
+months_by_freq <- fct_infreq(months_ordered)
+levels(months_by_freq)
+```
+
+
+
+
